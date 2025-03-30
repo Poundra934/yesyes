@@ -1,0 +1,35 @@
+name: Frequent Commit
+
+on:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "191299149+Poundra934@users.noreply.github.com"
+          
+      - name: Create frequent update
+        run: |
+          DATE=$(date +"%Y-%m-%d")
+          TIME=$(date +"%H:%M:%S")
+          echo "# Frequent Update: $DATE $TIME" >> frequent-updates.md
+          echo "" >> frequent-updates.md
+          echo "* Automated commit" >> frequent-updates.md
+          echo "" >> frequent-updates.md
+          
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "Frequent update $(date +"%Y-%m-%d %H:%M:%S")"
+          git push
